@@ -15,8 +15,6 @@ export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-
-    // making multiple promises
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );

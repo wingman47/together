@@ -18,8 +18,6 @@ const postSchema = mongoose.Schema(
     description: String,
     picturePath: String,
     userPicturePath: String,
-    // objects are stored in map in mongoDB, map is more efficient than array
-    // storing the users who liked a particular post
     likes: {
       type: Map,
       of: Boolean,

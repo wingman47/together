@@ -55,10 +55,8 @@ export const likePost = async (req, res) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
-    // post information
     const post = await Post.findById(id);
     const isLiked = post.likes.get(userId);
-    // check if the post is liked by the user. each post has information of who has liked it.
     if (isLiked) {
       post.likes.delete(userId);
     } else {
@@ -69,7 +67,6 @@ export const likePost = async (req, res) => {
       { likes: post.likes },
       { new: true }
     );
-    // update the post once liked/unliked
     res.status(201).json(updatedPost);
   } catch (error) {
     res.status(404).json({ message: error.message });

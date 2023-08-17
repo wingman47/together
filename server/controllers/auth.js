@@ -8,7 +8,6 @@ import User from "../models/User.js";
 /*                                REGISTER USER                               */
 /* -------------------------------------------------------------------------- */
 
-// get request body from frontend
 export const register = async (req, res) => {
   try {
     const {
@@ -21,16 +20,8 @@ export const register = async (req, res) => {
       location,
       occupation,
     } = req.body;
-    // encrypt the pw to store in database
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-
-    /* 
-      flow of JWT:
-      user registers the password, we salt it and store in our database
-      user logs in -> we salt it again and match it with the salted pw in db
-      if successful, we provide JWT and verify when needed
-    */
 
     const newUser = new User({
       firstName,
@@ -66,15 +57,9 @@ export const login = async (req, res) => {
     // using same salt to compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ msg: "INVALID CREDENTIALS" });
-
-    // if correct credentials, sign the token containing the payload (user._id in this case)
-    // the first argument is payload which contains the information
-    // whenever jwt is verified in verifyToken middleware it will return this payload
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     delete user.password;
     console.log(user);
-    // client can include this token in subsequent requests to access protected routes, and the
-    // server can verify the token's authenticity to give access to different api
     res.status(200).json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
