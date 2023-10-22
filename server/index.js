@@ -4,7 +4,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
 import helmet from "helmet";
-import morgan from "morgan";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -32,10 +31,9 @@ app.use(cors());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// setting HTTP headers using helmet and morgan.
+// setting HTTP headers using helmet.
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("common"));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
